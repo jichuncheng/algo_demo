@@ -69,10 +69,3 @@ class Solution(LCList):
         while not self.is_empty():
             self.turn(m-1)
             print(self.pop(), end="\n" if self.is_empty() else ", ")
-
-
-if __name__ == '__main__':
-    ListOperator.solution_list(10, 2, 7)
-    ListOperator.solution_linked_list(10, 2, 7)
-    solu = Solution()
-    solu.sort_(10, 2, 7)

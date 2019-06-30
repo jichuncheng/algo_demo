@@ -228,14 +228,3 @@ class DLList(LListWithRear):
         else:
             self._rear.next = None
         return e
-
-
-if __name__ == '__main__':
-    l = LList()
-    for i in range(5, 0, -1):
-        l.append(i)
-    l._sort2()
-    p = l._head
-    while p is not None:
-        print(p.elem)
-        p = p.next
