@@ -5,6 +5,14 @@ class LNode:
         self.next = next_
 
 
+# 双链表结点类
+class DLNode(LNode):
+
+    def __init__(self, elem, prev=None, next_=None):
+        LNode.__init__(elem, next_)
+        self.prev = prev
+
+
 # 单链表
 class LList:
 
@@ -50,6 +58,46 @@ class LList:
         e = p.next.elem
         p.next = None
         return e
+
+    # 调换表元素
+    def _sort(self):
+        if self._head is None:
+            return
+        crt = self._head.next
+        while crt is not None:
+            x = crt.elem
+            p = self._head
+            while p is not crt and p.elem <= x:
+                p = p.next
+            while p is not crt:
+                y = p.elem
+                p.elem = x
+                x = y
+                p = p.next
+            crt.elem = x
+            crt = crt.next
+
+    # 修改表链接
+    def _sort2(self):
+        p = self._head
+        if p is None or p.next is None:
+            return
+
+        rem = p.next
+        p.next = None
+        while rem is not None:
+            p = self._head
+            q = None
+            while p is not None and p.elem <= rem.elem:
+                q = p
+                p = p.next
+            if q is None:
+                self._head = rem
+            else:
+                q.next = rem
+            q = rem
+            rem = rem.next
+            q.next = p
 
 
 # 有尾节点的单链表
@@ -135,3 +183,59 @@ class LCList:
             if p is self._rear:
                 break
             p = p.next
+
+
+# 双链表类
+class DLList(LListWithRear):
+
+    def __init__(self):
+        LListWithRear.__init__(self)
+
+    def prepend(self, elem):
+        p = DLNode(elem, None, self._head)
+        if self._head is None:
+            self._rear = p
+        else:
+            p.next.prev = p
+        self._head = p
+
+    def append(self, elem):
+        p = DLNode(elem, self._rear, None)
+        if self._head is None:
+            self._head = p
+        else:
+            p.prev.next = p
+        self._rear = p
+
+    def pop(self):
+        if self._head is None:
+            raise ValueError('linkedlist no node')
+        e = self._head.elem
+        self._head = self._head.next
+        # head为空时什么也不用做
+        if self._head is not None:
+            self._head.prev = None
+        return e
+
+    def pop_last(self):
+        if self._head is None:
+            raise ValueError('linkedlist no node')
+        e = self._rear.elem
+        self._rear = self._rear.prev
+        if self._rear is None:
+            # 设置 _head保证is_empty正确工作
+            self._head = None
+        else:
+            self._rear.next = None
+        return e
+
+
+if __name__ == '__main__':
+    l = LList()
+    for i in range(5, 0, -1):
+        l.append(i)
+    l._sort2()
+    p = l._head
+    while p is not None:
+        print(p.elem)
+        p = p.next
